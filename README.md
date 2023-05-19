@@ -60,37 +60,37 @@ export default defineNuxtConfig({
 
 ### Properties:
 
-`id: String`
+#### `id: String`
 - used for the file[id][] file-input name
-`uploadUrl: String`
+#### `uploadUrl: String`
 - upload target url to post the files to
-`uploadText: String`
+#### `uploadText: String`
 - upload area text
-`removeText: String`
+#### `removeText: String`
 - string to use on the remove file item button
-`imgMaxSize: String`
+#### `imgMaxSize: String`
 - cube side size for the image preview and file icon
-`hasClick: Boolean`
+#### `hasClick: Boolean`
 - false will not show the click highlight and message, but still trigger the click-handler
-`clickText: String`
+#### `clickText: String`
 - text on the click highlight
-`clickFn: Function`
+#### `clickFn: Function`
 - handler on clicking on an item
-`clickDurrationMs: Number`
+#### `clickDurrationMs: Number`
 - how long the click highlight should be shown, 0 will not show the click highlight and message
-`initialFiles: Array`
+#### `initialFiles: Array`
 - list of files to fill in on initialization
-`filesIconColor: Object`
+#### `filesIconColor: Object`
 - file color map for file icon template
-`fileIconTemplate: String | Boolean`
+#### `fileIconTemplate: String | Boolean`
 - supply an alternative data string to use as file icon, placeholders: 🔆 = color, ❓ = font-family, 👑 = title
-`useFontAwesomeIcons: Boolean`
+#### `useFontAwesomeIcons: Boolean`
 - uses the fontawesome 5 icons, fontawesome css needs to be available allready
-`addFileInputs: Boolean`
+#### `addFileInputs: Boolean`
 - enable adding text input fields with filenames for each added file
-`columnMode: String`
+#### `columnMode: String`
 - adds .***-width, 'media' == media-query, 'container' == container-query, 'column' or nothing == 1fr
-`options: Object`
+#### `options: Object`
 - any native dropzone option
 
 
