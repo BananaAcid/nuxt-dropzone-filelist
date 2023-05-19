@@ -99,7 +99,7 @@ export default defineNuxtConfig({
 To use Methods, you need a ref on the component, then accessing it as usual.
 
 
-`.addFile()`
+#### `.addFile()`
 ```js
 // add image
 this.$refs.dropzoneFilelist.addFile('name.jpg', 123123/*bytes*/, '/assets/preview.jpg');
@@ -113,6 +113,25 @@ this.$refs.dropzoneFilelist.addFile({
   // imageUrl: '/assets/preview.jpg'
 });
 ```
+
+## Solutions // --- Section is WiP ! ---
+
+Tests are done [here in the pages](https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows?file=%2Fpages%2Fall.vue%3A1%2C1) vue files
+
+- item click handler
+  - click action -> :click-fn
+  - styling -> has-click,click-text,click-durration-ms
+- action buttons
+  - primary slot for additional icons
+  - handler: use @addedFile to add click handler by finding it with querySelector
+- loading initial files
+  - initial-files: array of name,filesize,imgUrl or fileicon color
+- server side upload
+  - `npm/h3-formidable`
+- getting list of added files
+  - `this.$refs.dzf.dropzone.files` -> `File[]`
+- item select toggle
+  - item click handler, toggle class 
 
 ## Development
 
