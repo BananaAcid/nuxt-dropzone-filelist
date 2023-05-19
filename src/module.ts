@@ -6,7 +6,7 @@ export interface ModuleOptions {}
 export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: "dropzone-filelist",
-    configKey: "dropzone-filelist",
+    configKey: "DropzoneFilelist",
   },
   // Default configuration options of the Nuxt module
   defaults: {},

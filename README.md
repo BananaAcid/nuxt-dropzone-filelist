@@ -82,7 +82,7 @@ export default defineNuxtConfig({
 - list of files to fill in on initialization
 #### `filesIconColor: Object`
 - file color map for file icon template
-#### `fileIconTemplate: String | Boolean`
+#### `fileIconTemplate: String | null`
 - supply an alternative data string to use as file icon, placeholders: 🔆 = color, ❓ = font-family, 👑 = title
 #### `useFontAwesomeIcons: Boolean`
 - uses the fontawesome 5 icons, fontawesome css needs to be available allready

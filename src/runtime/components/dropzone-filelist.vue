@@ -40,7 +40,7 @@
           em(data-dz-size) 0.0 MB
         //- span
           | Uploaded: 
-          em(data-modified='') ***
+          em(data-modified) ***
           
       .dz-progress
         span.dz-upload(data-dz-uploadprogress)
@@ -59,6 +59,15 @@
 </template>
 
 <script lang="ts">
+// @ts-ignore because it works
+import { defineComponent } from '#imports';
+
+//import { PropType, defineComponent } from 'nuxt/dist/app/compat/capi';
+//import { defineComponent, PropType } from 'vue';
+//import { defineComponent } from 'vue';
+import { PropType } from 'vue';
+
+
 import Dropzone from "dropzone";
 import type { DropzoneFile } from "dropzone";
 
@@ -122,7 +131,7 @@ export default defineComponent({
           filename: string;
           size?: number;
           imageUrl?: string;
-          color?: string; // without hash
+          color?: string; // with or without hash, both is fine
         }[]
       >,
       description: "list of files to fill in on initialization",
@@ -141,8 +150,8 @@ export default defineComponent({
       description: "file color map for file icon template",
     },
     fileIconTemplate: {
-      type: String || Boolean,
-      default: false,
+      type: String,
+      default: null,
       description:
         "supply an alternative data string to use as file icon, placeholders: 🔆 = color, ❓ = font-family, 👑 = title",
     },
@@ -242,11 +251,11 @@ export default defineComponent({
 
       if (!type.match(/image.*/)) {
         const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-        const manualColor = !file["color"]
+        const manualColor = !(file as any)["color"]
           ? false
           : (() => {
-              const c = file["color"];
-              delete file["color"];
+            const c = (file as any)["color"];
+            delete (file as any)["color"];
               return c;
             })();
         const ff =
@@ -254,7 +263,7 @@ export default defineComponent({
 
         // file icon, ref: https://jsfiddle.net/BananaAcid/wL04zerk/
         const url = (
-          this.fileIconTemplate ||
+          vm.fileIconTemplate ||
           "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 116 128' style='--color:%23🔆;'%3E%3Cg transform='translate(-271 -88)'%3E%3Cpath d='M7,0H63.631c1.666,0-2.117,23.8,4.858,30.709C75.631,37.644,97,31.937,97,34.137V121a7,7,0,0,1-7,7H7a7,7,0,0,1-7-7V7A7,7,0,0,1,7,0Z' transform='translate(290 88)' fill='%23e2e5e7'%3E%3C/path%3E%3Cpath d='M0,0,33,33.134V56L0,27.426Z' transform='translate(354 88)' fill='%23cad1d8'%3E%3C/path%3E%3Cpath d='M62.1,0c5.647.793,35.01,29.741,34.694,34.7.254,3.042-20-1.078-25.071,0C61.5,34.737,62.1,30.05,62.1,26.184Z' transform='translate(290 88)' fill='%23b0b7bd'%3E%3C/path%3E%3C/g%3E%3Cg transform='translate(-271 -88)'%3E%3Cpath d='M4,0H93a4,4,0,0,1,4,4V44a4,4,0,0,1-4,4H4a4,4,0,0,1-4-4V4A4,4,0,0,1,4,0Z' transform='translate(274 151)' fill='%23cad1d8'%3E%3C/path%3E%3Crect width='97' height='48' rx='4' transform='translate(271 148)' style='fill: var(--color)'%3E%3C/rect%3E%3Ctext class='text' transform='translate(319 172)' fill='%23fff' font-size='27' font-family='❓' font-weight='700' text-anchor='middle' alignment-baseline='central' style='text-transform: uppercase; pointer-events: none;'%3E👑%3C/text%3E%3C/g%3E%3C/svg%3E"
         )
           .replace(/🔆/, manualColor || vm.filesIconColor[ext] || randomColor) // color
@@ -343,7 +352,7 @@ export default defineComponent({
         filename = nameOrFileObj.name;
         size = nameOrFileObj.size;
         imageUrl = nameOrFileObj.imageUrl;
-        color = nameOrFileObj["color"]; // cheating: special option that needs to be removed by next function
+        color = (nameOrFileObj as any)["color"]; // cheating: special option that needs to be removed by next function
       } else {
         filename = nameOrFileObj;
       }
