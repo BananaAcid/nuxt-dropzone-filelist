@@ -9,8 +9,8 @@ A Nuxt module with opiniated settings to show a file list, directly based on dro
 
 <img width="911" alt="image" src="https://github.com/BananaAcid/compile-superhero/assets/1894723/31e8000c-a2f1-4116-bc1f-2dca94a5bd6d" style="max-width: 80vw" />
 
-- [Release Notes](/CHANGELOG.md)
-- [Dev and tests](https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows)
+- [Sandbox with dev and tests](https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows)
+- [Git repository](https://github.com/BananaAcid/nuxt-dropzone-filelist)
 
 <!--
 - [🏀 Online playground](https://stackblitz.com/github/your-org/nuxt-dropzone-filelist?file=playground%2Fapp.vue) -->
@@ -158,6 +158,8 @@ npm run test:watch
 # Release new version
 npm run release
 ```
+
+- [Release Notes](https://github.com/BananaAcid/nuxt-dropzone-filelist/blob/main/CHANGELOG.md)
 
 <!-- Badges -->
 [npm-version-src]: https://img.shields.io/npm/v/nuxt-dropzone-filelist/latest.svg?style=flat&colorA=18181B&colorB=28CF8D
