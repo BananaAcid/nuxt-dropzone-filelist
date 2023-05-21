@@ -12,7 +12,7 @@
 
 .filelist-content(
     ref="dropzone" 
-    :id="id ? '#'+id : ''" 
+    :id="id ?? ''" 
     :style="'--click-content-inital:\"' + clickText + '\";--img-max-size-inital:'+imgMaxSize" 
     :class="(hasClick ? 'hasClick' : '') + ' ' + (columnMode ? columnMode +'-width' : '') "
     )
@@ -76,7 +76,7 @@ export default defineComponent({
     id: {
       type: String,
       default: null,
-      description: "used for the file[id][] file-input name",
+      description: "used for the file[id][] file-input name, falls back to `options.paramName` -> element id -> random number",
     },
     uploadUrl: {
       type: String,
@@ -155,6 +155,11 @@ export default defineComponent({
       description:
         "supply an alternative data string to use as file icon, placeholders: 🔆 = color, ❓ = font-family, 👑 = title",
     },
+    usePreviewIcon: {
+      type: Boolean,
+      default: true,
+      description: "use to show file icon while loading preview or if preview is not available",
+    },
     useFontAwesomeIcons: {
       type: Boolean,
       default: false,
@@ -219,6 +224,7 @@ export default defineComponent({
 
     // used for the file[id][] file-input name
     const id =
+      vm.options.paramName ||
       vm.id ||
       self.element.id ||
       //self.element.className?.replaceAll(' ', '.') ||
@@ -243,13 +249,13 @@ export default defineComponent({
 
     // why here? to have any addition of files in `init()` to trigger `addedfile`
     self.on("addedfile", function (file) {
-      console.log("F", file.name || "??", file, "-----");
+      //console.log("F", file.name || "??", file, "-----");
 
       const ext = file.name.split(".").pop() || "";
       // mock files have no type, nor do image mock files
       const type = file.type || (typesImage as any)[ext] || "";
 
-      if (!type.match(/image.*/)) {
+      if (vm.usePreviewIcon || !type.match(/image.*/)) {
         const randomColor = Math.floor(Math.random() * 16777215).toString(16);
         const manualColor = !(file as any)["color"]
           ? false
@@ -345,7 +351,8 @@ export default defineComponent({
         | { name: string; size?: number; imageUrl?: string },
       size?: number,
       imageUrl?: string,
-      color?: string | false
+      color?: string | false,
+      crossOrigin: "anonymous" | "use-credentials" | undefined = 'anonymous'
     ): void {
       let filename: string;
       if (nameOrFileObj instanceof Object) {
@@ -365,13 +372,13 @@ export default defineComponent({
       };
 
       // File.dataURL
-      if (imageUrl) {
+      if (this.options.createImageThumbnails && imageUrl) {
         // add to visible items
         this.dropzone.displayExistingFile(
           mockFile,
           /*imageUrl*/ imageUrl.trim(),
           /*callback*/ undefined,
-          /*crossOrigin*/ "anonymous",
+          /*crossOrigin*/ crossOrigin,
           /*resizeThumbnail*/ true
         );
       } else {

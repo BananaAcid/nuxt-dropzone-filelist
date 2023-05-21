@@ -19,11 +19,13 @@ A Nuxt module with opiniated settings to show a file list, directly based on dro
 ## Features
 
 <!-- Highlight some of the features your module provide here -->
-- no secondary dependencies
+- no secondary vue dependencies
 - opiniated to enable a specific style
 - inbuild file icon
 - places text input fields for filenames, while uploads files directly to custom url
 - filling files on load
+- even files added by code, have an input
+- it is always relyably multifile internally, dropzone options can limit the file amount
 
 ## Quick Setup
 
@@ -60,38 +62,42 @@ export default defineNuxtConfig({
 
 ### Properties:
 
-#### `id: String`
-- used for the file[id][] file-input name
-#### `uploadUrl: String`
+#### `id: String = null`
+- used for the file[id][] file-input name, falls back to `options.paramName` -> element id -> random number
+#### `uploadUrl: String`  *(required)*
 - upload target url to post the files to
-#### `uploadText: String`
+#### `uploadText: String = 'Drag files here or click to upload'`
 - upload area text
-#### `removeText: String`
+#### `removeText: String = 'remove?'`
 - string to use on the remove file item button
-#### `imgMaxSize: String`
+#### `imgMaxSize: String = '2.5em'`
 - cube side size for the image preview and file icon
-#### `hasClick: Boolean`
+#### `hasClick: Boolean = false`
 - false will not show the click highlight and message, but still trigger the click-handler
-#### `clickText: String`
+#### `clickText: String = 'Clicked!'`
 - text on the click highlight
-#### `clickFn: Function`
+#### `clickFn: Function` *= (console log debug)*
 - handler on clicking on an item
-#### `clickDurrationMs: Number`
+#### `clickDurrationMs: Number = 1000`
 - how long the click highlight should be shown, 0 will not show the click highlight and message
-#### `initialFiles: Array`
+#### `initialFiles: Array = []`
 - list of files to fill in on initialization
-#### `filesIconColor: Object`
+#### `filesIconColor: Object = ...` 
+- default: `{ txt: "#E9EAEB", rtf: "#7C54AB", pdf: "#f40f02", doc: "#1B5EBE", docx: "#1B5EBE", xls: "#1d6f42", xlsx: "#1d6f42", }`
 - file color map for file icon template
-#### `fileIconTemplate: String | null`
+#### `fileIconTemplate: String | null = null`
 - supply an alternative data string to use as file icon, placeholders: 🔆 = color, ❓ = font-family, 👑 = title
-#### `useFontAwesomeIcons: Boolean`
+#### `usePreviewIcon: Boolean = true`
+- use to show file icon while loading preview or if preview is not available
+#### `useFontAwesomeIcons: Boolean = false`
 - uses the fontawesome 5 icons, fontawesome css needs to be available allready
-#### `addFileInputs: Boolean`
+#### `addFileInputs: Boolean = true`
 - enable adding text input fields with filenames for each added file
-#### `columnMode: String`
+#### `columnMode: String = 'container'`
 - adds .***-width, 'media' == media-query, 'container' == container-query, 'column' or nothing == 1fr
-#### `options: Object`
-- any native dropzone option
+#### `options: Object = {}`
+- any [native dropzone options](https://docs.dropzone.dev/configuration/basics/configuration-options)
+- `uploadMultiple` has no effect
 
 
 ### Methods: 
@@ -116,22 +122,61 @@ this.$refs.dropzoneFilelist.addFile({
 
 ## Solutions // --- Section is WiP ! ---
 
-Tests are done [here in the pages](https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows?file=%2Fpages%2Fall.vue%3A1%2C1) vue files
+Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows?file=%2Fpages%2Fall.vue%3A1%2C1) *.vue files
 
 - item click handler
-  - click action -> :click-fn
-  - styling -> has-click,click-text,click-durration-ms
+  - click action -> `:click-fn`
+  - styling -> `:has-click`,`:click-text`,`:click-durration-ms`
 - action buttons
   - primary slot for additional icons
-  - handler: use @addedFile to add click handler by finding it with querySelector
+  - handler: use `@addedFile` to add click handler by finding it with querySelector
 - loading initial files
-  - initial-files: array of name,filesize,imgUrl or fileicon color
-- server side upload
-  - `npm/h3-formidable`
+  - `:initial-files` with array of: name,filesize,imgUrl/fileicon-color
 - getting list of added files
   - `this.$refs.dzf.dropzone.files` -> `File[]`
 - item select toggle
-  - item click handler, toggle class 
+  - item click handler, toggle class on element
+- server side upload
+  - use [`npm/h3-formidable`](https://www.npmjs.com/package/h3-formidable)
+    ```js
+    // ./server/api/upload.post.ts
+    import fs from "node:fs/promises";
+    import path from "node:path";
+
+    import { readFiles } from "h3-formidable";
+
+    export default defineEventHandler(async (event) => {
+
+      // ... do some validation here: session / bearer-token / jwt
+
+      const { fields, files } = await readFiles(event, {
+        includeFields: true,
+        maxFileSize: 20 * 1024 * 1024,
+        filter: () => true,
+        // filter: ({ name, originalFilename, mimetype }) => mimetype && mimetype.includes("image"),
+
+        // uploadDir: './upload', // direct uploading
+        // keepExtensions: true,
+
+        // other formidable options here
+        // https://github.com/node-formidable/formidable#options
+      });
+
+
+      // if not `uploadDir` ... we move the file:
+      let f: any = files.file[0];
+
+      const targetPath = path.join(
+        await fs.realpath("./upload"),
+        f.originalFilename
+      );
+
+      await fs.copyFile(f.filepath, targetPath);
+      await fs.unlink(f.filepath);
+
+      // if a string is returned, it will be shown as error by DropZone
+      return "";
+    ```
 
 ## Development
 
