@@ -56,7 +56,7 @@ export default defineNuxtConfig({
 
 ```js
 <template>
-  <DropzoneFilelist />
+  <DropzoneFilelist uploadUrl="/api/upload" />
 </template>
 ```
 
