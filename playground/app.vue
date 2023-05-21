@@ -2,8 +2,8 @@
   <div style="container-type: inline-size;">
     Nuxt module playground!
     <DropzoneFilelist
-      ref="dzf"
       id="file1"
+      ref="dzf"
       upload-url="https://httpbin.org/post"
       :initial-files="files"
       :has-click="true"

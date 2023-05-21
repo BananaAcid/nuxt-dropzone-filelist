@@ -1,4 +1,20 @@
 {
   "root": true,
-  "extends": ["@nuxt/eslint-config"]
+  "extends": [
+    "@nuxt/eslint-config"
+  ],
+  "rules": {
+    "vue/singleline-html-element-content-newline": [
+      "error",
+      {
+        "ignoreWhenNoAttributes": true,
+        "ignoreWhenEmpty": true,
+        "ignores": [
+          "pre",
+          "textarea",
+          "button"
+        ]
+      }
+    ]
+  }
 }
