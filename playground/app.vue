@@ -4,14 +4,17 @@
     <DropzoneFilelist
       id="file1"
       ref="dzf"
+      use-formelement
       upload-url="https://httpbin.org/post"
       :initial-files="files"
       :has-click="true"
       :options="{ createImageThumbnails: true, paramName: 'files' }"
+      :disabled="isDisabled"
     />
 
     <button @click="addFile">add file</button>
     <button @click="addImage">add image</button>
+    <button @click="isDisabled = !isDisabled">switch disabled state</button>
   </div>
 </template>
 
@@ -24,6 +27,8 @@ export default defineComponent({
 
   data() {
     return {
+      isDisabled: false,
+
       files: [
         {
           name: "Filename_1.jpg",
@@ -70,3 +75,12 @@ export default defineComponent({
 
 });
 </script>
+
+<style>
+body {
+  padding: 2em;
+
+  font-family: -apple-system, BlinkMacSystemFont, open_sanslight,
+    "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+</style>

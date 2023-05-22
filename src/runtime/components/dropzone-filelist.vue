@@ -10,12 +10,13 @@
 <template lang="pug">
 //- note to convert pug to html: https://html-to-pug.com/
 
-.filelist-content(
-    ref="dropzone" 
-    :id="id ?? ''" 
-    :style="'--click-content-inital:\"' + clickText + '\";--img-max-size-inital:'+imgMaxSize" 
-    :class="(hasClick ? 'hasClick' : '') + ' ' + (columnMode ? columnMode +'-width' : '') "
-    )
+component.filelist-content(
+  :is="useFormelement ? 'form' : 'div'"
+  ref="dropzone" 
+  :id="id ?? ''" 
+  :style="'--click-content-inital:\"' + clickText + '\";--img-max-size-inital:'+imgMaxSize" 
+  :class="(hasClick ? 'hasClick' : '') + ' ' + (columnMode ? columnMode +'-width' : '') "
+  )
   .dz-message {{uploadText}}
 
   //- in VUE/Nuxt, do not use template-Tag -- it will get removed from DOM on page switch
@@ -172,12 +173,22 @@ export default defineComponent({
       description:
         "enable adding text input fields with filenames for each added file",
     },
-
     columnMode: {
       type: String,
       default: "container",
       description:
         "adds .***-width, 'media' == media-query, 'container' == container-query, 'column' or nothing == 1fr",
+    },
+    useFormelement: {
+      type: Boolean,
+      default: false,
+      description: "usually uses a div as wrapper, this changes it to `<form>`",
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false,
+      description: "disables using of the element like a form element (also sets a real `disabled` property)",
     },
 
     options: {
@@ -202,6 +213,20 @@ export default defineComponent({
     return {
       dropzone: null as unknown as Dropzone,
     };
+  },
+
+  watch: {
+    disabled(newVal: boolean /*, oldVal: boolean*/) {
+      const el = this.$refs.dropzone as HTMLElement;
+      if (newVal) {
+        el.setAttribute('disabled', '');
+        el.querySelectorAll('input').forEach(item => item.setAttribute('disabled', ''));
+      }
+      else {
+        el.removeAttribute('disabled');
+        el.querySelectorAll('input').forEach(item => item.removeAttribute('disabled'));
+      }
+    },
   },
 
   async mounted() {
@@ -527,6 +552,16 @@ section {
 
       content: var(--click-content-inital, "Clicked!");
     }
+  }
+
+  &[disabled] {
+    filter: grayscale(1);
+    opacity: .7;
+    pointer-events: none;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 }
 // list style

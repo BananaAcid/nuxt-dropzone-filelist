@@ -95,6 +95,10 @@ export default defineNuxtConfig({
 - enable adding text input fields with filenames for each added file
 #### `columnMode: String = 'container'`
 - adds .***-width, 'media' == media-query, 'container' == container-query, 'column' or nothing == 1fr
+#### `useFormelement: Boolean = false`
+- usually uses a div as wrapper, this changes it to `<form>`
+### `disabled: Boolean = false`
+- disables using of the element like a form element (also sets a real `disabled` property)
 #### `options: Object = {}`
 - any [native dropzone options](https://docs.dropzone.dev/configuration/basics/configuration-options)
 - `uploadMultiple` has no effect
@@ -136,6 +140,10 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
   - `this.$refs.dzf.dropzone.files` -> `File[]`
 - item select toggle
   - item click handler, toggle class on element
+- limit files 
+  - ```html 
+    <DropzoneFilelist upload-url="/api/upload" :options="{maxFiles: 2}" />
+    ```
 - server side upload
   - use [`npm/h3-formidable`](https://www.npmjs.com/package/h3-formidable)
     ```js
