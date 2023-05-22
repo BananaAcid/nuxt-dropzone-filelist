@@ -1,6 +1,6 @@
 {
   "name": "nuxt-dropzone-filelist",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "File list style for dropzone as Nuxt 3 module",
   "repository": "https://github.com/BananaAcid/nuxt-dropzone-filelist",
   "homepage": "https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows",
