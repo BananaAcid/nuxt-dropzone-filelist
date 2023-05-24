@@ -202,11 +202,9 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     init: (options: { dropzone: Dropzone; element: HTMLElement }) => true,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    addedFile: (options: {
-      file: DropzoneFile;
-      dropzone: Dropzone;
-      element: HTMLElement;
-    }) => true,
+    addedFile: (options: { file: DropzoneFile; dropzone: Dropzone; element: HTMLElement; }) => true,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    removedFile: (options: { file: DropzoneFile, dropzone: Dropzone, element: HTMLElement }) => true,
   },
 
   data() {
@@ -367,6 +365,11 @@ export default defineComponent({
     }
 
     vm.$emit("init", { dropzone: self, element: self.element });
+
+    self.on("removedfile", (file: Dropzone.DropzoneFile) =>
+      vm.$emit("removedFile", { dropzone: self, file, element: self.element })
+    );
+
   },
 
   methods: {

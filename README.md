@@ -12,10 +12,6 @@ A Nuxt module with opiniated settings to show a file list, directly based on dro
 - [Sandbox with dev and tests](https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows)
 - [Git repository](https://github.com/BananaAcid/nuxt-dropzone-filelist)
 
-<!--
-- [🏀 Online playground](https://stackblitz.com/github/your-org/nuxt-dropzone-filelist?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
-
 ## Features
 
 <!-- Highlight some of the features your module provide here -->
@@ -31,36 +27,38 @@ A Nuxt module with opiniated settings to show a file list, directly based on dro
 
 1. Add `nuxt-dropzone-filelist` dependency to your project
 
-```bash
-# Using pnpm
-pnpm add -D nuxt-dropzone-filelist
+    ```bash
+    # Using pnpm
+    pnpm add -D nuxt-dropzone-filelist
 
-# Using yarn
-yarn add --dev nuxt-dropzone-filelist
+    # Using yarn
+    yarn add --dev nuxt-dropzone-filelist
 
-# Using npm
-npm install --save-dev nuxt-dropzone-filelist
-```
+    # Using npm
+    npm install --save-dev nuxt-dropzone-filelist
+    ```
 
 2. Add `nuxt-dropzone-filelist` to the `modules` section of `nuxt.config.ts`
 
-```js
-export default defineNuxtConfig({
-  modules: [
-    'nuxt-dropzone-filelist'
-  ]
-})
-```
+    ```js
+    export default defineNuxtConfig({
+      modules: [
+        'nuxt-dropzone-filelist'
+      ]
+    })
+    ```
 
 3. Use it
 
-```js
-<template>
-  <DropzoneFilelist uploadUrl="/api/upload" />
-</template>
-```
+    ```html
+    <template>
+      <DropzoneFilelist uploadUrl="/api/upload" />
+    </template>
+    ```
 
 ### Properties:
+
+Note: When using as attributes, the properies will need to be cabab-case.
 
 #### `id: String = null`
 - used for the file[id][] file-input name, falls back to `options.paramName` -> element id -> random number
@@ -76,7 +74,8 @@ export default defineNuxtConfig({
 - false will not show the click highlight and message, but still trigger the click-handler
 #### `clickText: String = 'Clicked!'`
 - text on the click highlight
-#### `clickFn: Function` *= (console log debug)*
+#### `clickFn: ( fileName: string, fileElement: HTMLDivElement, dropzone: Dropzone ):void => ...` 
+- default: `console.log("clicked", fileName, { fileElement, dropzone })`
 - handler on clicking on an item
 #### `clickDurrationMs: Number = 1000`
 - how long the click highlight should be shown, 0 will not show the click highlight and message
@@ -97,12 +96,20 @@ export default defineNuxtConfig({
 - adds .***-width, 'media' == media-query, 'container' == container-query, 'column' or nothing == 1fr
 #### `useFormelement: Boolean = false`
 - usually uses a div as wrapper, this changes it to `<form>`
-### `disabled: Boolean = false`
+#### `disabled: Boolean = false`
 - disables using of the element like a form element (also sets a real `disabled` property)
 #### `options: Object = {}`
 - any [native dropzone options](https://docs.dropzone.dev/configuration/basics/configuration-options)
 - `uploadMultiple` has no effect
 
+### Events:
+
+#### `@addedFile: (options: {file: DropzoneFile, dropzone: Dropzone, element: HTMLElement}): void`
+- event handler that gets called when a file got added (as well as for `initialFiles`)
+- use to add event handlers to slotted elements
+
+#### `@removedFile: (options: { file: DropzoneFile, dropzone: Dropzone, element: HTMLElement}): void`
+- event handler that gets called when a file got removed
 
 ### Methods: 
 
@@ -110,6 +117,14 @@ To use Methods, you need a ref on the component, then accessing it as usual.
 
 
 #### `.addFile()`
+##### Params:
+1. `nameOrFileObj: | string | { name: string; size?: number; imageUrl?: string }`
+2. `size?: number`
+3. `imageUrl?: string`
+4. `color?: string | false`
+5. `crossOrigin: "anonymous" | "use-credentials" | undefined = 'anonymous'`
+
+##### Examples:
 ```js
 // add image
 this.$refs.dropzoneFilelist.addFile('name.jpg', 123123/*bytes*/, '/assets/preview.jpg');
@@ -124,28 +139,63 @@ this.$refs.dropzoneFilelist.addFile({
 });
 ```
 
-## Solutions // --- Section is WiP ! ---
+### Slots
+
+#### default
+- use to add html to use as actions that will be visible on hover
+- use event `@addedFile` to add click handlers
+
+## Solutions & Examples
 
 Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/dropzone-tests-and-styles-r7rows?file=%2Fpages%2Fall.vue%3A1%2C1) *.vue files
 
 - item click handler
-  - click action -> `:click-fn`
-  - styling -> `:has-click`,`:click-text`,`:click-durration-ms`
+  - to have a click action on a file item, add a handler with `:click-fn`
+  - styling can be done by `:has-click`,`:click-text`,`:click-durration-ms`
 - action buttons
-  - primary slot for additional icons
-  - handler: use `@addedFile` to add click handler by finding it with querySelector
+  - use default slot for additional buttons/links
+  - handler: use `@addedFile` to add click handler by finding it with `.querySelector()`
+  - ```html
+    <template>
+      <DropzoneFilelist upload-url="/api/upload" @addedFile="addedFile">
+        <button data-action-open-external>open</button>
+      </DropzoneFilelist>
+    </template>
+
+    <script>
+      export default defineComponent({
+        methods: {
+          addedFile({file, dropzone, element}) {
+            element
+              .querySelector('[data-action-open-external]')
+              .addEventListener('click', (ev) => {
+                ev.preventDefault();
+                ev.stopPropagation();
+
+                // custom action
+                alert(file.name);
+              });
+          },
+        },
+      });
+    </script>
+    ```
 - loading initial files
-  - `:initial-files` with array of: name,filesize,imgUrl/fileicon-color
+  - `:initial-files` needs an array of: `{name, filesize , imgUrl?, color?}` (imgUrl or color, color for file icon)
 - getting list of added files
   - `this.$refs.dzf.dropzone.files` -> `File[]`
 - item select toggle
-  - item click handler, toggle class on element
+  - use an item click handler
+  - toggle a class on `element` to change the background color
+  - use an array to add or remove the file names to keep track
 - limit files 
-  - ```html 
+  - use dropzones options, namely `maxFiles:number`
+    ```html 
     <DropzoneFilelist upload-url="/api/upload" :options="{maxFiles: 2}" />
     ```
-- server side upload
-  - use [`npm/h3-formidable`](https://www.npmjs.com/package/h3-formidable)
+- upload to nuxt /api
+  - use [`npm/h3-formidable`](https://www.npmjs.com/package/h3-formidable) 
+  - ... to let formidable save the file first, then copy it to where it should go (moving is usually a problem due to file permissions on temp files)
     ```js
     // ./server/api/upload.post.ts
     import fs from "node:fs/promises";
@@ -185,6 +235,7 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
       // if a string is returned, it will be shown as error by DropZone
       return "";
     ```
+  - the server could also be a PHP/ASPx/... server (when using the dropzone component from this package without the nuxt module part)
 
 ## Development
 
