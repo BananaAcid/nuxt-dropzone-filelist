@@ -14,8 +14,9 @@
 
     <button @click="addFile">add file</button>
     <button @click="addImage">add image</button>
-    <button @click="isDisabled = !isDisabled">switch disabled state</button>
-  </div>
+        <button @click="addBlank">add blank</button>
+        <button @click="isDisabled = !isDisabled">switch disabled state</button>
+      </div>
 </template>
 
 <script>
@@ -55,6 +56,11 @@ export default defineComponent({
       const i = this.$refs.dzf.dropzone.files.length + 1;
 
       this.$refs.dzf.addFile(`Filename_${i}.abc`, 0);
+    },
+    addBlank() {
+      const i = this.$refs.dzf.dropzone.files.length + 1;
+
+      this.$refs.dzf.addFile(``, 0);
     },
 
     addImage() {

@@ -274,7 +274,10 @@ export default defineComponent({
     self.on("addedfile", function (file) {
       //console.log("F", file.name || "??", file, "-----");
 
-      const ext = file.name.split(".").pop() || "";
+      const fname = file?.name?.trim() || '';
+      if (!fname) return;
+
+      const ext = fname.split(".").pop() || "";
       // mock files have no type, nor do image mock files
       const type = file.type || (typesImage as any)[ext] || "";
 
