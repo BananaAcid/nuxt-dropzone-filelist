@@ -62,6 +62,8 @@ Note: When using as attributes, the properies will need to be cabab-case.
 
 #### `id: String = null`
 - used for the file[id][] file-input name, falls back to `options.paramName` -> element id -> random number
+#### `nameTemplate: String = 'file[${id}][]'`
+- template for name to use, supports template-string content
 #### `uploadUrl: String`  *(required)*
 - upload target url to post the files to
 #### `uploadText: String = 'Drag files here or click to upload'`
@@ -104,6 +106,9 @@ Note: When using as attributes, the properies will need to be cabab-case.
 
 ### Events:
 
+#### `@init: (options: {dropzone: Dropzone, element: HTMLElement}): void`
+- event handler that gt4s called after initialization
+
 #### `@addedFile: (options: {file: DropzoneFile, dropzone: Dropzone, element: HTMLElement}): void`
 - event handler that gets called when a file got added (as well as for `initialFiles`)
 - use to add event handlers to slotted elements
@@ -117,6 +122,7 @@ To use Methods, you need a ref on the component, then accessing it as usual.
 
 
 #### `.addFile()`
+
 ##### Params:
 1. `nameOrFileObj: | string | { name: string; size?: number; imageUrl?: string }`
 2. `size?: number`

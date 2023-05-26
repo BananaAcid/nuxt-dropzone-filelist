@@ -13,7 +13,7 @@
 component.filelist-content(
   :is="useFormelement ? 'form' : 'div'"
   ref="dropzone" 
-  :id="id ?? ''" 
+  :id="id ?? ''"
   :style="'--click-content-inital:\"' + clickText + '\";--img-max-size-inital:'+imgMaxSize" 
   :class="(hasClick ? 'hasClick' : '') + ' ' + (columnMode ? columnMode +'-width' : '') "
   )
@@ -78,6 +78,11 @@ export default defineComponent({
       type: String,
       default: null,
       description: "used for the file[id][] file-input name, falls back to `options.paramName` -> element id -> random number",
+    },
+    nameTemplate: {
+      type: String,
+      default: 'file[${id}][]',
+      description: "template for name to use, supports template-string content",
     },
     uploadUrl: {
       type: String,
@@ -330,7 +335,7 @@ export default defineComponent({
       const el = document.createElement("input");
       el.type = "hidden";
       el.classList.add("file");
-      el.name = `file[${id}][]`;
+      el.name = eval('`' + this.nameTemplate + '`') || `file[${id}][]`;
       el.value = name;
       self.element.append(el);
     });

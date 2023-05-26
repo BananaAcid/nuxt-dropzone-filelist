@@ -10,6 +10,7 @@
       :has-click="true"
       :options="{ createImageThumbnails: true, paramName: 'files' }"
       :disabled="isDisabled"
+      name-template="f-test[${id}][]"
     />
 
     <button @click="addFile">add file</button>
@@ -58,9 +59,7 @@ export default defineComponent({
       this.$refs.dzf.addFile(`Filename_${i}.abc`, 0);
     },
     addBlank() {
-      const i = this.$refs.dzf.dropzone.files.length + 1;
-
-      this.$refs.dzf.addFile(``, 0);
+      this.$refs.dzf.addFile(undefined, 0);
     },
 
     addImage() {
