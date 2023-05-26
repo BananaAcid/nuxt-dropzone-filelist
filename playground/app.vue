@@ -14,9 +14,9 @@
 
     <button @click="addFile">add file</button>
     <button @click="addImage">add image</button>
-        <button @click="addBlank">add blank</button>
-        <button @click="isDisabled = !isDisabled">switch disabled state</button>
-      </div>
+    <button @click="addBlank">add blank</button>
+    <button @click="isDisabled = !isDisabled">switch disabled state</button>
+  </div>
 </template>
 
 <script>
