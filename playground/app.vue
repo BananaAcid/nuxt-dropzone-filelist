@@ -56,7 +56,7 @@ export default defineComponent({
     addFile() {
       const i = this.$refs.dzf.dropzone.files.length + 1;
 
-      this.$refs.dzf.addFile(`Filename_${i}.abc`, 0);
+      this.$refs.dzf.addFile(`Filename_${i}.abc`, 0, undefined, 'green');
     },
     addBlank() {
       this.$refs.dzf.addFile(undefined, 0);
