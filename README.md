@@ -88,6 +88,7 @@ Note: When using as attributes, the properies will need to be cabab-case.
 - file color map for file icon template
 #### `fileIconTemplate: String | null = null`
 - supply an alternative data string to use as file icon, placeholders: 🔆 = color, ❓ = font-family, 👑 = title
+- be aware: it has to be a image url (base64 or passed through `encodeURIComponent()`), resulting in something for SVGs like: `"data:image/svg+xml,%3Csvg ..."`
 #### `usePreviewIcon: Boolean = true`
 - use to show file icon while loading preview or if preview is not available
 #### `useFontAwesomeIcons: Boolean = false`

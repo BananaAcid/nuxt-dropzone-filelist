@@ -14,6 +14,7 @@
     />
 
     <button @click="addFile">add file</button>
+    <button @click="addRandomFile">add random file</button>
     <button @click="addImage">add image</button>
     <button @click="addBlank">add blank</button>
     <button @click="isDisabled = !isDisabled">switch disabled state</button>
@@ -56,9 +57,19 @@ export default defineComponent({
     addFile() {
       const i = this.$refs.dzf.dropzone.files.length + 1;
 
+      // testing fixed color + netscape colors
       this.$refs.dzf.addFile(`Filename_${i}.abc`, 0, undefined, 'green');
     },
+    addRandomFile() {
+      const i = this.$refs.dzf.dropzone.files.length + 1;
+      const ext = Math.random().toString(23).substring(2, 5);
+
+      // testing random colors
+      this.$refs.dzf.addFile(`Filename_${i}.${ext}`, 0);
+    },
     addBlank() {
+
+      // testing error behaviour
       this.$refs.dzf.addFile(undefined, 0);
     },
 
