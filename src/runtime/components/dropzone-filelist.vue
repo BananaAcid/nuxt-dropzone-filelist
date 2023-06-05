@@ -32,11 +32,11 @@ component.filelist-content(
           span(onClick="event.stopPropagation()") ×
           div(data-dz-remove) {{removeText}}
           
-      img(data-dz-thumbnail)
+      img.dz-image(data-dz-thumbnail)
       
-      div
-        header(data-dz-name) Filename.ext
-        span.dzfl-file-size
+      div.dz-details
+        header.dz-filename(data-dz-name) Filename.ext
+        span.dz-size
           | Size: 
           em(data-dz-size) 0.0 MB
         //- span
