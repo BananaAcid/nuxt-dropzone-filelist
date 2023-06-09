@@ -63,7 +63,8 @@ Note: When using as attributes, the properies will need to be cabab-case.
 #### `id: String = null`
 - used for the file[id][] file-input name, falls back to `options.paramName` -> element id -> random number
 #### `nameTemplate: String = 'file[${id}][]'`
-- template for name to use, supports template-string content
+- template for name to use, supports: `${id}`, `${name}`, `${num}` (current file index)
+- Note: no template-string content support
 #### `uploadUrl: String`  *(required)*
 - upload target url to post the files to
 #### `uploadText: String = 'Drag files here or click to upload'`
@@ -189,8 +190,10 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
     ```
 - loading initial files
   - `:initial-files` needs an array of: `{name, filesize , imgUrl?, color?}` (imgUrl or color, color for file icon)
+- getting a count of added files
+  - `this.$refs.dzf.dropzone.files.length`
 - getting list of added files
-  - `this.$refs.dzf.dropzone.files` -> `File[]`
+  - `this.$refs.dzf.dropzone.files` => `File[]`
 - item select toggle
   - use an item click handler
   - toggle a class on `element` to change the background color

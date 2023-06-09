@@ -332,10 +332,16 @@ export default defineComponent({
     // append input fields to the container
     self.on("addedfile", ({ name }) => {
       if (!this.addFileInputs) return;
+      const num = (self.files.length - 1).toString();
       const el = document.createElement("input");
       el.type = "hidden";
       el.classList.add("file");
-      el.name = eval('`' + this.nameTemplate + '`') || `file[${id}][]`;
+      //! eval() is usually marked by linters as evil .. better to replace known values
+      el.name = (('`' + this.nameTemplate + '`') || `file[${id}][]`)
+        .replaceAll('${id}', id)
+        .replaceAll('${name}', name)
+        .replaceAll('${num}', num)
+        ;
       el.value = name;
       self.element.append(el);
     });
