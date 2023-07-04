@@ -56,6 +56,22 @@ A Nuxt module with opinionated settings to show a file list, directly based on [
     </template>
     ```
 
+## Purpose
+
+Adds and removes corresponding `input[type="hidden"]` elements on dropzone usage:
+- this is the base idea of this module: use dropzone to upload files and provide a hidden input with the filename for a regular `<form>` element and default logic to handle (as well as to be used with oder form kits)
+- also allow getting an array of uploaded files for standalone usage
+
+Wrap around the real dropzone js lib without intermediate js libs:
+- this module will only break, when something in dropzone is fundemantally changed
+- or nuxt changes something about handling modules
+
+My own styles included:
+- I can push my own overall style
+- extended with features I thought should be preconfigured / included
+
+## Configuration
+
 ### Properties:
 
 Note: When using as attributes, the properies will need to be kebab-case.
@@ -121,7 +137,7 @@ Note: When using as attributes, the properies will need to be kebab-case.
 
 ### Methods: 
 
-To use Methods, you need a ref on the component, then access it as usual.
+To use Methods, you need a [vue ref property](https://vuejs.org/guide/essentials/template-refs.html#accessing-the-refs) on the component, then access it as usual.
 
 
 #### `.addFile()`
@@ -134,19 +150,61 @@ To use Methods, you need a ref on the component, then access it as usual.
 5. `crossOrigin: "anonymous" | "use-credentials" | undefined = 'anonymous'`
 
 ##### Examples:
-```js
-// add image
-this.$refs.dropzoneFilelist.addFile('name.jpg', 123123/*bytes*/, '/assets/preview.jpg');
-// add non-image
-this.$refs.dropzoneFilelist.addFile('name.ext', 123123/*bytes*/, undefined, '#FF0000');
-// as object
-this.$refs.dropzoneFilelist.addFile({
-  name: 'name.ext',
-  size: 123123,
-  color: '#ff0000',
-  // imageUrl: '/assets/preview.jpg'
-});
+```html
+<template>
+  <DropzoneFilelist ref="dropzoneFilelist"  uploadUrl="/api/upload" />
+</template>
 ```
+
+Options API:
+```html
+<script>
+export default defineComponent({
+  mounted() {
+    // just making calling addFile() shorter
+    const dropzoneFilelist = this.$refs.dropzoneFilelist;
+    
+    // add image
+    dropzoneFilelist.addFile('name.jpg', 123123/*bytes*/, '/assets/preview.jpg');
+    // add non-image
+    dropzoneFilelist.addFile('name.ext', 123123/*bytes*/, undefined, '#FF0000');
+    // as object
+    dropzoneFilelist.addFile({
+      name: 'name.ext',
+      size: 123123,
+      color: '#ff0000',
+      // imageUrl: '/assets/preview.jpg'
+    });
+  }
+});
+</script>
+```
+
+Composition API:
+```html
+<script setup>
+import { ref, onMounted } from 'vue';
+
+// declare a ref to hold the element reference
+// the name must match template ref value
+const dropzoneFilelist = ref(null);
+
+onMounted(() => {
+  // add image
+  dropzoneFilelist.addFile('name.jpg', 123123/*bytes*/, '/assets/preview.jpg');
+  // add non-image
+  dropzoneFilelist.addFile('name.ext', 123123/*bytes*/, undefined, '#FF0000');
+  // as object
+  dropzoneFilelist.addFile({
+    name: 'name.ext',
+    size: 123123,
+    color: '#ff0000',
+    // imageUrl: '/assets/preview.jpg'
+  });
+});
+</script>
+```
+
 
 ### Slots
 
@@ -164,7 +222,7 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
 - action buttons
   - use default slot for additional buttons/links
   - handler: use `@addedFile` to add click handler by finding it with `.querySelector()`
-  - ```html
+    ```html
     <template>
       <DropzoneFilelist upload-url="/api/upload" @addedFile="addedFile">
         <button data-action-open-external>open</button>
