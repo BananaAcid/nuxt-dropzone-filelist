@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.0.11
+
+[compare changes](https://github.com/BananaAcid/nuxt-dropzone-filelist/compare/v1.0.10...v1.0.11)
+
+### 🏡 Chore
+
+- **release:** V1.0.10 ([18991d3](https://github.com/BananaAcid/nuxt-dropzone-filelist/commit/18991d3))
+
+### ❤️  Contributors
+
+- Nabil Redmann <repo@bananaacid.de>
+
 ## v1.0.10
 
 [compare changes](https://github.com/BananaAcid/nuxt-dropzone-filelist/compare/v1.0.9...v1.0.10)
