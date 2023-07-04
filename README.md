@@ -5,7 +5,7 @@
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-A Nuxt module with opiniated settings to show a file list, directly based on dropzone.js (NOT based on any other plugin or module).
+A Nuxt module with opinionated settings to show a file list, directly based on [dropzone.js](https://www.dropzone.dev/), NOT based on any other dropzone plugin or module.
 
 <img width="911" alt="image" src="https://github.com/BananaAcid/compile-superhero/assets/1894723/31e8000c-a2f1-4116-bc1f-2dca94a5bd6d" style="max-width: 80vw" />
 
@@ -16,7 +16,7 @@ A Nuxt module with opiniated settings to show a file list, directly based on dro
 
 <!-- Highlight some of the features your module provide here -->
 - no secondary vue dependencies
-- opiniated to enable a specific style
+- opinionated to enable a specific style
 - inbuild file icon
 - places text input fields for filenames, while uploads files directly to custom url
 - filling files on load
@@ -58,12 +58,12 @@ A Nuxt module with opiniated settings to show a file list, directly based on dro
 
 ### Properties:
 
-Note: When using as attributes, the properies will need to be cabab-case.
+Note: When using as attributes, the properies will need to be kebab-case.
 
 #### `id: String = null`
 - used for the file[id][] file-input name, falls back to `options.paramName` -> element id -> random number
 #### `nameTemplate: String = 'file[${id}][]'`
-- template for name to use, supports: `${id}`, `${name}`, `${num}` (current file index)
+- template for name to use, supports: `${id}`, `${name}`, `${num}` (current file index, no logic)
 - Note: no template-string content support
 #### `uploadUrl: String`  *(required)*
 - upload target url to post the files to
@@ -85,7 +85,7 @@ Note: When using as attributes, the properies will need to be cabab-case.
 #### `initialFiles: Array = []`
 - list of files to fill in on initialization
 #### `filesIconColor: Object = ...` 
-- default: `{ txt: "#E9EAEB", rtf: "#7C54AB", pdf: "#f40f02", doc: "#1B5EBE", docx: "#1B5EBE", xls: "#1d6f42", xlsx: "#1d6f42", }`
+- default: `{ txt: "#E9EAEB", rtf: "#7C54AB", pdf: "#f40f02", doc: "#1B5EBE", docx: "#1B5EBE", xls: "#1d6f42", xlsx: "#1d6f42" }`
 - file color map for file icon template
 #### `fileIconTemplate: String | null = null`
 - supply an alternative data string to use as file icon, placeholders: 🔆 = color, ❓ = font-family, 👑 = title
@@ -97,7 +97,8 @@ Note: When using as attributes, the properies will need to be cabab-case.
 #### `addFileInputs: Boolean = true`
 - enable adding text input fields with filenames for each added file
 #### `columnMode: String = 'container'`
-- adds .***-width, 'media' == media-query, 'container' == container-query, 'column' or nothing == 1fr
+- adds `.***-width` classes to adjust to available space, select the method to use:
+  -  `'media'` == media-query, `'container'` == container-query, `'column'` / nothing == 1fr
 #### `useFormelement: Boolean = false`
 - usually uses a div as wrapper, this changes it to `<form>`
 #### `disabled: Boolean = false`
@@ -120,7 +121,7 @@ Note: When using as attributes, the properies will need to be cabab-case.
 
 ### Methods: 
 
-To use Methods, you need a ref on the component, then accessing it as usual.
+To use Methods, you need a ref on the component, then access it as usual.
 
 
 #### `.addFile()`
@@ -159,7 +160,7 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
 
 - item click handler
   - to have a click action on a file item, add a handler with `:click-fn`
-  - styling can be done by `:has-click`,`:click-text`,`:click-durration-ms`
+  - appearance can be changed by `:has-click`,`:click-text`,`:click-durration-ms`
 - action buttons
   - use default slot for additional buttons/links
   - handler: use `@addedFile` to add click handler by finding it with `.querySelector()`
@@ -205,9 +206,9 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
     ```
 - allow specific files only
   - use dropzone's options, namely `acceptedFiles:string`
-  ```html
-  <DropzoneFilelist upload-url="/api/upload" :options="{acceptedFiles: 'image/jpeg,image/png,application/pdf'}" />
-  ```
+    ```html
+    <DropzoneFilelist upload-url="/api/upload" :options="{acceptedFiles: 'image/jpeg,image/png,application/pdf'}" />
+    ```
 - upload to nuxt /api
   - use [`npm/h3-formidable`](https://www.npmjs.com/package/h3-formidable) 
   - ... to let formidable save the file first, then copy it to where it should go (moving is usually a problem due to file permissions on temp files)
