@@ -221,7 +221,7 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
 
     export default defineEventHandler(async (event) => {
 
-      // ... do some validation here: session / bearer-token / jwt
+      // ... do some validation here: session / bearer-token / jwt / ...
 
       const { fields, files } = await readFiles(event, {
         includeFields: true,
@@ -251,6 +251,7 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
       // if a string is returned, it will be shown as error by DropZone
       return "";
     ```
+  - Nuxt (h3) has native Session support: [useSession()](https://www.jsdocs.io/package/h3#useSession) (my [documentation and example](https://codesandbox.io/p/sandbox/h3-session-w93xr7?file=%2FREADME.md))
   - the server could also be a PHP/ASPx/... server (when using the dropzone component from this package without the nuxt module part)
 
 ## Development
