@@ -336,8 +336,8 @@ export default defineComponent({
       const el = document.createElement("input");
       el.type = "hidden";
       el.classList.add("file");
-      //! eval() is usually marked by linters as evil .. better to replace known values
-      el.name = (('`' + this.nameTemplate + '`') || `file[${id}][]`)
+      //! eval('`' + this.nameTemplate + '`') is usually marked by linters as evil .. better to replace known values
+      el.name = (this.nameTemplate || `file[${id}][]`)
         .replaceAll('${id}', id)
         .replaceAll('${name}', name)
         .replaceAll('${num}', num)
