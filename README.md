@@ -199,10 +199,15 @@ Tests are available [here in the ./pages/](https://codesandbox.io/p/sandbox/drop
   - toggle a class on `element` to change the background color
   - use an array to add or remove the file names to keep track
 - limit files 
-  - use dropzones options, namely `maxFiles:number`
+  - use dropzone's options, namely `maxFiles:number`
     ```html 
     <DropzoneFilelist upload-url="/api/upload" :options="{maxFiles: 2}" />
     ```
+- allow specific files only
+  - use dropzone's options, namely `acceptedFiles:string`
+  ```html
+  <DropzoneFilelist upload-url="/api/upload" :options="{acceptedFiles: 'image/jpeg,image/png,application/pdf'}" />
+  ```
 - upload to nuxt /api
   - use [`npm/h3-formidable`](https://www.npmjs.com/package/h3-formidable) 
   - ... to let formidable save the file first, then copy it to where it should go (moving is usually a problem due to file permissions on temp files)
